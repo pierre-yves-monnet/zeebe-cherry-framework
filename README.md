@@ -10,6 +10,7 @@ The framework offers a library for your project and a set of administrative page
 # Developer guide
 
 ## Step-by-step guide
+
 Create your new Spring Boot Maven project.
 Include in your pom.xml the library
 
@@ -20,6 +21,7 @@ Include in your pom.xml the library
 </dependency>
 
 ## Develop your own worker
+
 Create a new Java class for your worker. Extends the class AbstractWorker.
 In doing that, you have to respect some rules:
 Define the input and output of your worker. Which input does it need? Which output will it produce? This information is used to help the designer to understand how to use your worker and provide you comfort: if you declare that an input LONG is mandatory, then the framework checks for you its existence. When your code is called, you can be sure to have all you need.
@@ -57,10 +59,12 @@ The model is the collection message (**"org.camunida.cherry.message"**), and the
     - Errors the connector can throw.
 
 
+
 ## Tests
 Java class test follows the same architecture, `test/java/org.camunda.cherry.<CollectionName>`.
 
 Process test should be saved under test/resources/<collectionName>. For example, the `SendMessage.bpmn` test process is saved under `main/resources/message`
+
 
 
 
@@ -87,6 +91,7 @@ public void execute(final JobClient jobClient, final ActivatedJob activatedJob) 
 
 On the opposite, the worker declares the list of Output variables it will be created. The abstract class checks that all output variables is correctly produced by the worker, no more, no less. Suppose the output contract is not respected (you forgot one variable, or you provided an undeclared variable), a BPMN error is thrown.
 
+
 A contract is very useful:
 * As a developer, you don't need to worry about the existence of the variable. If you ask it, you will have it during the execution.
 * As a designer, all Input and Output variables for a worker are declared and documented.
@@ -94,7 +99,8 @@ A contract is very useful:
 This implied the implementation declare Inputs and Outputs
 ````
 public OfficeToPdfWorker() {
-  super("v-pdf-convert-to",
+
+  super("c-pdf-convert-to",
   Arrays.asList(
     AbstractWorker.WorkerParameter.getInstance(INPUT_SOURCE_FILE, Object.class, Level.REQUIRED, "FileVariable for the file to convert"),
     AbstractWorker.WorkerParameter.getInstance(INPUT_SOURCE_STORAGEDEFINITION, String.class, Level.REQUIRED, "Storage Definition use to access the file"),
@@ -105,6 +111,7 @@ public OfficeToPdfWorker() {
     AbstractWorker.WorkerParameter.getInstance(OUTPUT_DESTINATION_FILE, Object.class, Level.REQUIRED, "FileVariable converted")
   ),
   Arrays.asList(BPMERROR_CONVERSION_ERROR, BPMERROR_LOAD_FILE_ERROR));
+
 }
 ````
 
@@ -197,6 +204,7 @@ The workers section describes all workers available in the project. For each wor
 expected and Outputs produced by the worker.
 
 Click on one of the rows in the table to see more details. For example, here are details about the "PingWorker": 
+
 
 ![Worker Detail Screen Shot](src/main/resources/static/img/workerDetailScreenShot.png?raw=true)
 
@@ -295,6 +303,5 @@ Note: the temporary folder is accessible only on one host, and each host has a d
 
 ## Example of usages
 See different examples under src/test/resources/org.camunda.cherry. You have a folder per collection, and processes in the collection.
-
 
 

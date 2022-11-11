@@ -10,10 +10,15 @@
 <body>
 {{>_nav}}
 <section class="section">
+    <div class="workerHeader"></div>
     <div class="container">
+        <h1 class="runner-name title is-size-1">
+            {{#logo}}<img width="50px" style="padding-right:10px" src="{{logo}}"/>{{/logo}}
+        </h1>
         <div class="tabs">
             <ul>
                 <li class="is-active"><a data-tpl="runner/_overview.mustache">Overview</a></li>
+                <li><a data-tpl="runner/_description.mustache">Description</a></li>
                 <li><a data-tpl="runner/_inputs.mustache">Inputs</a></li>
                 <li><a data-tpl="runner/_outputs.mustache">Outputs</a></li>
                 <li><a data-tpl="runner/_errortypes.mustache">Types of Errors</a></li>
@@ -61,6 +66,7 @@
 
         if(runnerName) {
             getWorker(runnerName).then(function(runner){
+                console.log(runner);
                 initTabs(runner);
                 showTab(runner, "runner/_overview.mustache");
             });
@@ -81,7 +87,17 @@
     $(document).ready( function () {
         initNavBar();
         getWorkerId();
-        console.log("worker initialized. Last update: 2022-07-16 01");
+        // render overview
+        getTemplate("runner/_header.mustache").then(function(template){
+            const urlParams = new URLSearchParams(location.search);
+            let runnerName = urlParams.get('runnerName');
+            getWorker(runnerName).then(function(runner){
+                let html = Mustache.render(template, runner);
+                $('.workerHeader').html(html);
+            });
+        });
+
+        //$('.workerHeader').html(html);
     } );
 </script>
 </body>
